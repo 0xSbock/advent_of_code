@@ -1,10 +1,11 @@
 use std::fs;
 use itertools::Itertools;
 
-fn compute(numbers: Vec<usize>) -> Option<(usize, usize)> {
-    for arr in numbers.into_iter().permutations(2) {
-        if arr[0] + arr[1] == 2020 {
-            return Some((arr[0], arr[1]));
+fn compute(numbers: Vec<usize>, number_count: usize) -> Option<Vec<usize>> {
+    for arr in numbers.into_iter().permutations(number_count) {
+        let current_sum = arr.iter().fold(0, |acc, x| acc + x);
+        if current_sum == 2020 {
+            return Some(arr);
         }
     }
     None
@@ -16,8 +17,20 @@ fn main() {
     let numbers: Vec<usize> = input_str.split("\n")
         .flat_map(|number_str| number_str.parse::<usize>())
         .collect();
-    match compute(numbers) {
-        Some((a, b)) => println!("{} * {} = {}",a ,b , a*b),
+    match compute(numbers.clone(), 2) {
+        Some(arr) => {
+            let formatting = arr.iter().join("*");
+            let result = arr.iter().fold(1, |acc, x| acc * x);
+            println!("{} = {}", formatting, result);
+        },
+        None => println!("Did not find anything /o\\")
+    }
+    match compute(numbers, 3) {
+        Some(arr) => {
+            let formatting = arr.iter().join("*");
+            let result = arr.iter().fold(1, |acc, x| acc * x);
+            println!("{} = {}", formatting, result);
+        },
         None => println!("Did not find anything /o\\")
     }
 }
