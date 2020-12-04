@@ -36,6 +36,11 @@ impl CorruptedPassword {
         let char_count = self.password.chars().filter(|&c| c == self.character).collect::<Vec<char>>().len();
         (self.min_occurrence..=self.max_occurrence).contains(&char_count)
     }
+
+    fn toboggan_check (&self) -> bool {
+        (self.password.chars().nth(self.min_occurrence - 1).unwrap() == self.character) ^
+        (self.password.chars().nth(self.max_occurrence - 1).unwrap() == self.character)
+    }
 }
 
 
@@ -44,17 +49,22 @@ fn main() -> io::Result<()> {
     let f = BufReader::new(f);
 
     let mut uncorrupted_count = 0;
+    let mut toboggan_count = 0;
     for line in f.lines() {
-        match CorruptedPassword::from_str(&line?) {
+        match CorruptedPassword::from_str(&line?.clone()) {
             Ok(cpwd) => {
                 if cpwd.is_uncorrupted() {
                     uncorrupted_count += 1;
+                }
+                if cpwd.toboggan_check() {
+                    toboggan_count += 1;
                 }
             },
             // break if input is empty on from string method
             Err(_) => break
         }
     }
-    println!("{}", uncorrupted_count);
+    println!("Stage 1: {}", uncorrupted_count);
+    println!("Stage 2: {}", toboggan_count);
     Ok(())
 }
