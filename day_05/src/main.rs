@@ -17,10 +17,10 @@ fn boarding_pass_to_seat(boarding_pass: String) -> Seat {
     let mut column: u8 = 0;
     for (i, character) in boarding_pass[..7].chars().rev().enumerate() {
         match character {
-            'F' => {
+            'B' => {
                 row |= 2_u8.pow((i) as u32);
             }
-            'B' => {}
+            'F' => {}
             _ => panic!("Character not allowed!"),
         }
     }
