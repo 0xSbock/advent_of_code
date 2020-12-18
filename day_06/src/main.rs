@@ -34,7 +34,7 @@ fn main() {
             group
                 .iter()
                 .map(|answer| answer.chars().collect::<HashSet<char>>())
-                .fold(('a'..'z').collect::<HashSet<char>>(), |a, b| {
+                .fold(('a'..='z').collect::<HashSet<char>>(), |a, b| {
                     a.intersection(&b).map(|&c| c).collect::<HashSet<char>>()
                 })
         })
